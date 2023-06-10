@@ -14,15 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "teachers")
 @SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
 public class TeacherEntity extends AbstractUserEntity {
-
-    @ManyToMany
-    @JoinTable(
-            name = "subject_teacher",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    private Set<SubjectEntity> subjects;
 }
