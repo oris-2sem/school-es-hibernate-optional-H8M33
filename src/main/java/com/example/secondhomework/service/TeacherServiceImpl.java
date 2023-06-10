@@ -7,6 +7,7 @@ import com.example.secondhomework.model.users.StudentEntity;
 import com.example.secondhomework.model.users.TeacherEntity;
 import com.example.secondhomework.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class TeacherServiceImpl implements com.example.secondhomework.service.Te
 
     private final TeacherRepository repository;
 
-    private final SubjectService subjectService;
+    private final PasswordEncoder encoder;
 
     @Override
     public TeacherEntity getByUsername(String teacher_username) {
@@ -44,9 +45,8 @@ public class TeacherServiceImpl implements com.example.secondhomework.service.Te
                 .secondName(request.getSecondName())
                 .patronymic(request.getPatronymic())
                 .role("TEACHER")
-                .hashPassword(String.valueOf(request.getHashPassword().hashCode()))
+                .hashPassword(encoder.encode(request.getHashPassword()))
                 .username(request.getUsername())
-                .subjects(request.getSubjects_title().stream().map(subjectService::getByTitle).collect(Collectors.toSet()))
                 .build());
     }
 
@@ -58,9 +58,8 @@ public class TeacherServiceImpl implements com.example.secondhomework.service.Te
                                     x.setFirstName(request.getFirstName());
                                     x.setSecondName(request.getSecondName());
                                     x.setPatronymic(request.getPatronymic());
-                                    x.setHashPassword(String.valueOf(request.getHashPassword().hashCode()));
+                                    x.setHashPassword(encoder.encode(request.getHashPassword()));
                                     x.setUsername(request.getUsername());
-                                    x.setSubjects(request.getSubjects_title().stream().map(subjectService::getByTitle).collect(Collectors.toSet()));
                                     return x;
                                 }
                         )
